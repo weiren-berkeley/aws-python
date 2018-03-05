@@ -5,8 +5,16 @@ import argparse
 import json
 import random
 import serial
+import os
 
-ser = serial.Serial('/dev/ttyS0', baudrate=115200,
+raspberryPi = False
+if (os.path.exists('/dev/ttyS0')):
+    raspberryPi = True
+    print('Find serial port at /dev/ttyS0')
+else:
+    print('Can not find serial port at /dev/ttyS0')
+if (raspberryPi):
+    ser = serial.Serial('/dev/ttyS0', baudrate=115200,
                     parity=serial.PARITY_NONE,
                     stopbits=serial.STOPBITS_TWO,
                     bytesize=serial.EIGHTBITS
@@ -18,59 +26,63 @@ def customCallback(client, userdata, message):
     # print("Received a new message " + "from topic: " + message.topic)
     obj = json.loads(message.payload)
     # print(message.payload)
-    print(obj['text'])
-    print(obj['command_angle1'])
-    print("--------------")
-    angle1 = obj['command_angle1']
-    angle2 = 2
-    angle3 = 3
-    angle4 = 4
-    angle5 = 5
-    angle6 = 6
-    angle7 = 7
-    ser.write('B\n')
-    ser.write(str(angle1) + '\n')
-    ser.write(str(angle2) + '\n')
-    ser.write(str(angle3) + '\n')
-    ser.write(str(angle4) + '\n')
-    ser.write(str(angle5) + '\n')
-    ser.write(str(angle6) + '\n')
-    ser.write(str(angle7) + '\n')
-    ser.write('E\n')
+
+    if (raspberryPi):
+        angle1 = obj['command_angle1']
+        angle2 = 2
+        angle3 = 3
+        angle4 = 4
+        angle5 = 5
+        angle6 = 6
+        angle7 = 7
+        ser.write('B\n')
+        ser.write(str(angle1) + '\n')
+        ser.write(str(angle2) + '\n')
+        ser.write(str(angle3) + '\n')
+        ser.write(str(angle4) + '\n')
+        ser.write(str(angle5) + '\n')
+        ser.write(str(angle6) + '\n')
+        ser.write(str(angle7) + '\n')
+        ser.write('E\n')
+    else:
+        print(obj['text'])
+        print(obj['command_angle1'])
+        print("--------------")
 
 
 # Read in command-line parameters
-parser = argparse.ArgumentParser()
-parser.add_argument("-e", "--endpoint", action="store", dest="host", help="Y`our AWS IoT custom endpoint`")
-parser.add_argument("-r", "--rootCA", action="store", dest="rootCAPath", help="Root CA file path")
-parser.add_argument("-c", "--cert", action="store", dest="certificatePath", help="Certificate file path")
-parser.add_argument("-k", "--key", action="store", dest="privateKeyPath", help="Private key file path")
-parser.add_argument("-w", "--websocket", action="store_true", dest="useWebsocket", default=False,
-                    help="Use MQTT over WebSocket")
-parser.add_argument("-id", "--clientId", action="store", dest="clientId", default="basicPubSub",
-                    help="Targeted client id")
-parser.add_argument("-t", "--topic", action="store", dest="topic", default="sdk/test/Python", help="Targeted topic")
-parser.add_argument("-m", "--mode", action="store", dest="mode", default="both",
-                    help="Operation modes: %s"%str(AllowedActions))
-parser.add_argument("-M", "--message", action="store", dest="message", default="Hello World from Server!",
-                    help="Message to publish")
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument("-e", "--endpoint", action="store", dest="host", help="Y`our AWS IoT custom endpoint`")
+# parser.add_argument("-r", "--rootCA", action="store", dest="rootCAPath", help="Root CA file path")
+# parser.add_argument("-c", "--cert", action="store", dest="certificatePath", help="Certificate file path")
+# parser.add_argument("-k", "--key", action="store", dest="privateKeyPath", help="Private key file path")
+# parser.add_argument("-w", "--websocket", action="store_true", dest="useWebsocket", default=False,
+#                     help="Use MQTT over WebSocket")
+# parser.add_argument("-id", "--clientId", action="store", dest="clientId", default="basicPubSub",
+#                     help="Targeted client id")
+# parser.add_argument("-t", "--topic", action="store", dest="topic", default="sdk/test/Python", help="Targeted topic")
+# parser.add_argument("-m", "--mode", action="store", dest="mode", default="both",
+#                     help="Operation modes: %s"%str(AllowedActions))
+# parser.add_argument("-M", "--message", action="store", dest="message", default="Hello World from Server!",
+#                     help="Message to publish")
+# args = parser.parse_args()
 # host = 'a21zozqgendyv9.iot.us-east-2.amazonaws.com'
 # rootCAPath = '~/.aws/root-CA.crt'
 # certificatePath = '~/.aws/465eb4c119-certificate.pem.crt'
 # privateKeyPath = '~/.aws/465eb4c119-private.pem.key'
 host = 'a21zozqgendyv9.iot.us-east-2.amazonaws.com'
-rootCAPath = '/Users/weiren/.aws/root-CA.crt'
-certificatePath = '/Users/weiren/.aws/certificate.pem.crt'
-privateKeyPath = '/Users/weiren/.aws/private.pem.key'
-useWebsocket = args.useWebsocket
-clientId = 'iot' + str(random.random()*100000000)
-print(clientId)
+rootCAPath = 'root-CA.crt'
+certificatePath = 'certificate.pem.crt'
+privateKeyPath = 'private.pem.key'
+useWebsocket = False
+clientId = 'iot' + str(int(random.random()*10000000000000))
+print('clintId: ' + clientId)
 topic = 'oparp'
+mode = 'both'
 
-if args.mode not in AllowedActions:
-    parser.error("Unknown --mode option %s. Must be one of %s" % (args.mode, str(AllowedActions)))
-    exit(2)
+# if args.mode not in AllowedActions:
+#     parser.error("Unknown --mode option %s. Must be one of %s" % (args.mode, str(AllowedActions)))
+#     exit(2)
 
 # if args.useWebsocket and args.certificatePath and args.privateKeyPath:
 #     parser.error("X.509 cert authentication and WebSocket are mutual exclusive. Please pick one.")
@@ -108,20 +120,20 @@ myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 # Connect and subscribe to AWS IoT
 myAWSIoTMQTTClient.connect()
-if args.mode == 'both' or args.mode == 'subscribe':
+if mode == 'both' or mode == 'subscribe':
     myAWSIoTMQTTClient.subscribe(topic, 1, customCallback)
 time.sleep(2)
 
 # Publish to the same topic in a loop forever
 loopCount = 0
 while True:
-    if args.mode == 'both' or args.mode == 'publish':
+    if mode == 'both' or mode == 'publish':
         message = {}
-        message['message'] = args.message
+        message['message'] = 'oparp'
         message['sequence'] = loopCount
         messageJson = json.dumps(message)
         # myAWSIoTMQTTClient.publish(topic, messageJson, 1)
-        if args.mode == 'publish':
+        if mode == 'publish':
             print('Published topic %s: %s\n' % (topic, messageJson))
         loopCount += 1
     time.sleep(1)
