@@ -3,20 +3,25 @@ import logging
 import time
 import argparse
 import json
+import random
+
 
 AllowedActions = ['both', 'publish', 'subscribe']
 
 # Custom MQTT message callback
 def customCallback(client, userdata, message):
-    print("Received a new message " + "from topic: " + message.topic)
-    print(message.payload)
+    # print("Received a new message " + "from topic: " + message.topic)
+    obj = json.loads(message.payload)
+    # print(message.payload)
+    print(obj['text'])
+    print(obj['command_angle1'])
     print("--------------")
 
 
 # Read in command-line parameters
 parser = argparse.ArgumentParser()
-parser.add_argument("-e", "--endpoint", action="store", required=True, dest="host", help="Y`our AWS IoT custom endpoint`")
-parser.add_argument("-r", "--rootCA", action="store", required=True, dest="rootCAPath", help="Root CA file path")
+parser.add_argument("-e", "--endpoint", action="store", dest="host", help="Y`our AWS IoT custom endpoint`")
+parser.add_argument("-r", "--rootCA", action="store", dest="rootCAPath", help="Root CA file path")
 parser.add_argument("-c", "--cert", action="store", dest="certificatePath", help="Certificate file path")
 parser.add_argument("-k", "--key", action="store", dest="privateKeyPath", help="Private key file path")
 parser.add_argument("-w", "--websocket", action="store_true", dest="useWebsocket", default=False,
@@ -28,31 +33,31 @@ parser.add_argument("-m", "--mode", action="store", dest="mode", default="both",
                     help="Operation modes: %s"%str(AllowedActions))
 parser.add_argument("-M", "--message", action="store", dest="message", default="Hello World from Server!",
                     help="Message to publish")
-
 args = parser.parse_args()
 # host = 'a21zozqgendyv9.iot.us-east-2.amazonaws.com'
 # rootCAPath = '~/.aws/root-CA.crt'
 # certificatePath = '~/.aws/465eb4c119-certificate.pem.crt'
 # privateKeyPath = '~/.aws/465eb4c119-private.pem.key'
-host = args.host
-rootCAPath = args.rootCAPath
-certificatePath = args.certificatePath
-privateKeyPath = args.privateKeyPath
+host = 'a21zozqgendyv9.iot.us-east-2.amazonaws.com'
+rootCAPath = '/Users/weiren/.aws/root-CA.crt'
+certificatePath = '/Users/weiren/.aws/certificate.pem.crt'
+privateKeyPath = '/Users/weiren/.aws/private.pem.key'
 useWebsocket = args.useWebsocket
-clientId = args.clientId
-topic = args.topic
+clientId = 'iot' + str(random.random()*100000000)
+print(clientId)
+topic = 'oparp'
 
 if args.mode not in AllowedActions:
     parser.error("Unknown --mode option %s. Must be one of %s" % (args.mode, str(AllowedActions)))
     exit(2)
 
-if args.useWebsocket and args.certificatePath and args.privateKeyPath:
-    parser.error("X.509 cert authentication and WebSocket are mutual exclusive. Please pick one.")
-    exit(2)
+# if args.useWebsocket and args.certificatePath and args.privateKeyPath:
+#     parser.error("X.509 cert authentication and WebSocket are mutual exclusive. Please pick one.")
+#     exit(2)
 
-if not args.useWebsocket and (not args.certificatePath or not args.privateKeyPath):
-    parser.error("Missing credentials for authentication.")
-    exit(2)
+# if not args.useWebsocket and (not args.certificatePath or not args.privateKeyPath):
+#     parser.error("Missing credentials for authentication.")
+#     exit(2)
 
 # Configure logging
 # logger = logging.getLogger("AWSIoTPythonSDK.core")
@@ -94,7 +99,7 @@ while True:
         message['message'] = args.message
         message['sequence'] = loopCount
         messageJson = json.dumps(message)
-        myAWSIoTMQTTClient.publish(topic, messageJson, 1)
+        # myAWSIoTMQTTClient.publish(topic, messageJson, 1)
         if args.mode == 'publish':
             print('Published topic %s: %s\n' % (topic, messageJson))
         loopCount += 1
