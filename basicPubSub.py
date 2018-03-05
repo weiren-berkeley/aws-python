@@ -4,8 +4,13 @@ import time
 import argparse
 import json
 import random
+import serial
 
-
+ser = serial.Serial('/dev/ttyS0', baudrate=115200,
+                    parity=serial.PARITY_NONE,
+                    stopbits=serial.STOPBITS_TWO,
+                    bytesize=serial.EIGHTBITS
+                    )
 AllowedActions = ['both', 'publish', 'subscribe']
 
 # Custom MQTT message callback
@@ -16,6 +21,22 @@ def customCallback(client, userdata, message):
     print(obj['text'])
     print(obj['command_angle1'])
     print("--------------")
+    angle1 = obj['command_angle1']
+    angle2 = 2
+    angle3 = 3
+    angle4 = 4
+    angle5 = 5
+    angle6 = 6
+    angle7 = 7
+    ser.write('B\n')
+    ser.write(str(angle1) + '\n')
+    ser.write(str(angle2) + '\n')
+    ser.write(str(angle3) + '\n')
+    ser.write(str(angle4) + '\n')
+    ser.write(str(angle5) + '\n')
+    ser.write(str(angle6) + '\n')
+    ser.write(str(angle7) + '\n')
+    ser.write('E\n')
 
 
 # Read in command-line parameters
