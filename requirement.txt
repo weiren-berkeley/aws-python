@@ -1,2 +1,4 @@
 sudo apt-get install python-serial
+enable_uart=1  in /boot/config.txt
+sudo chmod a+rw /dev/ttyAMA0
 pip install AWSIoTPythonSDK
