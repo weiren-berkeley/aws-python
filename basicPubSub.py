@@ -27,6 +27,7 @@ def customCallback(client, userdata, message):
     obj = json.loads(message.payload)
     # print(message.payload)
     if (raspberryPi):
+<<<<<<< HEAD
         angle1 = obj['command_angle1']
         angle2 = 2
         angle3 = 3
@@ -45,6 +46,28 @@ def customCallback(client, userdata, message):
         ser.write('E\n')
     print(obj['text'])
     print(obj['command_angle1'])
+=======
+	if (obj.has_key('command_angle1')):
+	    angle1 = obj['command_angle1']
+       	    angle2 = 2
+            angle3 = 3
+            angle4 = 4
+            angle5 = 5
+            angle6 = 6
+            angle7 = 7
+            ser.write('B\n')
+            ser.write(str(angle1) + '\n')
+            ser.write(str(angle2) + '\n')
+            ser.write(str(angle3) + '\n')
+            ser.write(str(angle4) + '\n')
+            ser.write(str(angle5) + '\n')
+            ser.write(str(angle6) + '\n')
+            ser.write(str(angle7) + '\n')
+            ser.write('E\n')
+    print(obj['text'])
+    if (obj.has_key('command_angle1')):
+	print(obj['command_angle1'])
+>>>>>>> 73fe5332e16d77b97001d19a906a8771b27fed06
     print("--------------")
 
 
