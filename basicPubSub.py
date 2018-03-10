@@ -44,10 +44,9 @@ def customCallback(client, userdata, message):
         ser.write(str(angle6) + '\n')
         ser.write(str(angle7) + '\n')
         ser.write('E\n')
-    else:
-        print(obj['text'])
-        print(obj['command_angle1'])
-        print("--------------")
+    print(obj['text'])
+    print(obj['command_angle1'])
+    print("--------------")
 
 
 # Read in command-line parameters
