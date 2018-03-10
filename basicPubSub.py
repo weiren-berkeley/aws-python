@@ -26,7 +26,6 @@ def customCallback(client, userdata, message):
     # print("Received a new message " + "from topic: " + message.topic)
     obj = json.loads(message.payload)
     # print(message.payload)
-
     if (raspberryPi):
         angle1 = obj['command_angle1']
         angle2 = 2
@@ -44,10 +43,9 @@ def customCallback(client, userdata, message):
         ser.write(str(angle6) + '\n')
         ser.write(str(angle7) + '\n')
         ser.write('E\n')
-    else:
-        print(obj['text'])
-        print(obj['command_angle1'])
-        print("--------------")
+    print(obj['text'])
+    print(obj['command_angle1'])
+    print("--------------")
 
 
 # Read in command-line parameters
