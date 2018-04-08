@@ -29,10 +29,10 @@ def customCallback(client, userdata, message):
     if (raspberryPi):
         if ('command_angle1' in obj):
             angle1 = obj['command_angle1']
-            angle2 = obj['command_angle1']
-            angle3 = obj['command_angle1']
-            angle4 = obj['command_angle1']
-            angle5 = obj['command_angle1']
+            angle2 = obj['command_angle2']
+            angle3 = obj['command_angle3']
+            angle4 = obj['command_angle4']
+            angle5 = obj['command_angle5']
             angle6 = obj['command_angle1']
             angle7 = obj['command_angle1']
             ser.write('B\n')
