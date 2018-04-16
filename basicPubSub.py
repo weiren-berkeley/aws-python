@@ -46,7 +46,15 @@ def customCallback(client, userdata, message):
             ser.write('E\n')
     print(obj['text'])
     if ('command_angle1' in obj):
-	    print(obj['command_angle1'])
+	    print('angle1: ' + str(obj['command_angle1']))
+    if ('command_angle2' in obj):
+	    print('angle2: ' + str(obj['command_angle2']))
+    if ('command_angle3' in obj):
+	    print('angle3: ' + str(obj['command_angle3']))
+    if ('command_angle4' in obj):
+	    print('angle4: ' + str(obj['command_angle4']))
+    if ('command_angle5' in obj):
+	    print('angle5: ' + str(obj['command_angle5']))
     print("--------------")
 
 
