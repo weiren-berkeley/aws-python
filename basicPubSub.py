@@ -90,7 +90,7 @@ clientId = 'iot' + str(int(random.random()*10000000000000))
 print('clintId: ' + clientId)
 topic = 'oparp'
 mode = 'both'
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(04, GPIO.OUT)
 p = GPIO.PWM(04, 50)
 p.start(1)
