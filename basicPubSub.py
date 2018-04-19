@@ -47,7 +47,8 @@ def customCallback(client, userdata, message):
             ser.write('E\n')
     print(obj['text'])
     if ('command_angle1' in obj):
-        p.ChangeDutyCycle(int(obj['command_angle1'])/2)
+        pwm.ChangeDutyCycle(75)
+        # p.ChangeDutyCycle(int(obj['command_angle1'])/2)
         print('angle1: ' + str(obj['command_angle1']))
     if ('command_angle2' in obj):
 	    print('angle2: ' + str(obj['command_angle2']))
@@ -90,8 +91,8 @@ print('clintId: ' + clientId)
 topic = 'oparp'
 mode = 'both'
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(05, GPIO.OUT)
-p = GPIO.PWM(05, 50)
+GPIO.setup(04, GPIO.OUT)
+p = GPIO.PWM(04, 200)
 p.start(1)
 # if args.mode not in AllowedActions:
 #     parser.error("Unknown --mode option %s. Must be one of %s" % (args.mode, str(AllowedActions)))
