@@ -21,8 +21,6 @@ if (raspberryPi):
                     bytesize=serial.EIGHTBITS
                     )
 
-
-
     p.ChangeDutyCycle(20)
     AllowedActions = ['both', 'publish', 'subscribe']
 
@@ -93,8 +91,8 @@ print('clintId: ' + clientId)
 topic = 'oparp'
 mode = 'both'
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(4, GPIO.OUT)
-p = GPIO.PWM(4, 50)
+GPIO.setup(04, GPIO.OUT)
+p = GPIO.PWM(04, 50)
 p.start(1)
 # if args.mode not in AllowedActions:
 #     parser.error("Unknown --mode option %s. Must be one of %s" % (args.mode, str(AllowedActions)))
