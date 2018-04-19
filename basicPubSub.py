@@ -48,7 +48,7 @@ def customCallback(client, userdata, message):
     print(obj['text'])
     if ('command_angle1' in obj):
         print(int(int(obj['command_angle1'])/2))
-        p.ChangeDutyCycle(int(int(obj['command_angle1'])/2))
+        p.ChangeDutyCycle(int(int(obj['command_angle1'])/2)+1)
         print('angle1: ' + str(obj['command_angle1']))
     if ('command_angle2' in obj):
 	    print('angle2: ' + str(obj['command_angle2']))
