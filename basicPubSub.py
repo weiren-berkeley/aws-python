@@ -92,7 +92,7 @@ topic = 'oparp'
 mode = 'both'
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(12, GPIO.OUT)
-p = GPIO.PWM(12, 50)
+p = GPIO.PWM(12, 200)
 p.start(1)
 # if args.mode not in AllowedActions:
 #     parser.error("Unknown --mode option %s. Must be one of %s" % (args.mode, str(AllowedActions)))
