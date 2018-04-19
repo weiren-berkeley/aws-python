@@ -6,6 +6,7 @@ import json
 import random
 import serial
 import os
+import RPi.GPIO as GPIO
 
 raspberryPi = False
 if (os.path.exists('/dev/ttyS0')):
@@ -19,7 +20,11 @@ if (raspberryPi):
                     stopbits=serial.STOPBITS_TWO,
                     bytesize=serial.EIGHTBITS
                     )
-AllowedActions = ['both', 'publish', 'subscribe']
+
+
+
+    p.ChangeDutyCycle(20)
+    AllowedActions = ['both', 'publish', 'subscribe']
 
 # Custom MQTT message callback
 def customCallback(client, userdata, message):
@@ -87,7 +92,10 @@ clientId = 'iot' + str(int(random.random()*10000000000000))
 print('clintId: ' + clientId)
 topic = 'oparp'
 mode = 'both'
-
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(4, GPIO.OUT)
+p = GPIO.PWM(4, 50)
+p.start(1)
 # if args.mode not in AllowedActions:
 #     parser.error("Unknown --mode option %s. Must be one of %s" % (args.mode, str(AllowedActions)))
 #     exit(2)
